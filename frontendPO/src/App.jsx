@@ -8,24 +8,22 @@ function App() {
   const [usuario, setUsuario] = useState('');
   const [contraseña, setContraseña] = useState('');
   const [mensaje, setMensaje] = useState('');
-  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsVisible(false);
-      document.documentElement.classList.add('bg-transition');
+      document.documentElement.classList.add('bg-transition'); 
+      document.body.style.backgroundColor = '#ffffff';
       setTimeout(() => {
         setShowLogin(true);
       }, 2500);
-    }, 2000);
+    }, 2000); 
 
     return () => clearTimeout(timer);
   }, []);
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    setLoading(true); // Mostrar carga
-
     try {
       const response = await fetch('http://localhost:5000/login', {
         method: 'POST',
@@ -36,16 +34,12 @@ function App() {
       const data = await response.json();
       if (data.success) {
         setMensaje('✅ Inicio de sesión exitoso');
-        setTimeout(() => {
-          window.location.href = 'https://example.com'; // Redirige después de 1s
-        }, 1000);
+        
       } else {
         setMensaje('❌ Usuario o contraseña incorrectos');
       }
     } catch (error) {
       setMensaje('❌ Error en la conexión con el servidor');
-    } finally {
-      setLoading(false); // Ocultar carga
     }
   };
 
@@ -55,33 +49,38 @@ function App() {
         <img
           src={oneplusImg}
           alt="OnePlus"
+          style={{ width: '200px', height: '200px' }}
           className={`oneplus-image ${isVisible ? 'visible' : 'fade-out'}`}
         />
       )}
 
       {showLogin && (
         <div className="login-container">
-          <h2>Iniciar Sesión</h2>
-          <form onSubmit={handleLogin} className="login-form">
-            <input
-              type="text"
-              placeholder="Usuario"
-              value={usuario}
-              onChange={(e) => setUsuario(e.target.value)}
-              required
-            />
-            <input
-              type="password"
-              placeholder="Contraseña"
-              value={contraseña}
-              onChange={(e) => setContraseña(e.target.value)}
-              required
-            />
-            <button type="submit" disabled={loading}>
-              {loading ? 'Ingresando...' : 'Ingresar'}
-            </button>
-          </form>
-          {mensaje && <p className="login-message">{mensaje}</p>}
+          <p className='title'>Hola!</p>
+          <p className='subtitle'>Iniciar Sesión</p>
+          <form onSubmit={handleLogin}>
+        <p className='label'>
+          Usuario
+        </p>
+        <input
+          type="text"
+          value={usuario}
+          onChange={(e) => setUsuario(e.target.value)}
+          required
+        />
+        <p className='label' style={{ marginTop: '10px' }}>
+          Contraseña
+        </p>
+        <input
+          type="password"
+          value={contraseña}
+          onChange={(e) => setContraseña(e.target.value)}
+          required
+        />
+        <button type="submit" className='ingresarButton'>Iniciar Sesión</button>
+        <button type="submit" className='registerButton'>Registrarse</button>
+      </form>
+      {mensaje && <p>{mensaje}</p>}
         </div>
       )}
     </div>
